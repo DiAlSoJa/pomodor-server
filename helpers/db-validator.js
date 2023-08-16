@@ -1,5 +1,6 @@
 const Usuario= require("../models/usuario");
 const Folder = require("../models/folder");
+const Carta = require("../models/carta");
 
 const existeUsuarioPorId = async(id)=>{
     const existeUsuario = await Usuario.findById(id);
@@ -11,9 +12,15 @@ const existeFolderPorId = async(id)=>{
 
     if(!existeFolder) throw new Error(`El Folder id=${id} no existe`);
 }
+const existeCartaPorId = async(id)=>{
+    const existeCarta = await Carta.findById(id);
+
+    if(!existeCarta) throw new Error(`El Carta id=${id} no existe`);
+}
 
 module.exports = {
     existeUsuarioPorId,
-    existeFolderPorId
+    existeFolderPorId,
+    existeCartaPorId
 }
 
