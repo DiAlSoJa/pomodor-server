@@ -7,9 +7,16 @@ const {
     deleteFolder
 } = require("../controllers/folder");
 
+const {validarResultados} = require("../helpers/validarResultados")
+const {validarJwt} = require("../helpers/jsonwebtoken");
+const { check } = require("express-validator");
 const router = Router();
 
-router.post("/crfo",createFolder);
+router.post("/crfo",[
+    check("name","EL nombre es obligatorioi").not().isEmpty(),
+    validarJwt,
+    validarResultados
+],createFolder);
 
 router.get("/gtfo",getFolders);
 

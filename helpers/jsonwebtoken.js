@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const {response,request} = require("express");
-const admin = require("../models/admin");
+const Usuario = require("../models/usuario");
 require("dotenv").config();
 
 const validarJwt = async(req=request,res=response,next)=>{
@@ -15,7 +15,7 @@ const validarJwt = async(req=request,res=response,next)=>{
     try {
         const {uid} =  jwt.verify(token,process.env.JWT_SECRET);
 
-        const usuarioAuth = await admin.findById(uid);
+        const usuarioAuth = await Usuario.findById(uid);
         
         if(!usuarioAuth){
             
