@@ -10,6 +10,8 @@ const {
 const {validarResultados} = require("../helpers/validarResultados")
 const {validarJwt} = require("../helpers/jsonwebtoken");
 const { check } = require("express-validator");
+
+const {existeFolderPorId} = require("../helpers/db-validator")
 const router = Router();
 
 router.post("/crfo",[
@@ -18,11 +20,29 @@ router.post("/crfo",[
     validarResultados
 ],createFolder);
 
-router.get("/gtfo",getFolders);
+router.get("/gtfo",
+[   
 
-router.put("/pufo",updateFolder);
+    validarJwt,
+    validarResultados
+]
+,getFolders);
 
-router.delete("/defo",deleteFolder);
+router.put("/pufo/:id",
+[
+    check('id', 'No es un ID válido').isMongoId(),
+    check('id').custom( existeFolderPorId ),
+    check("name","el nombre es obligatorio").not().isEmpty(),
+    validarJwt,
+    validarResultados
+],updateFolder);
+
+router.delete("/defo/:id",[
+    check('id', 'No es un ID válido').isMongoId(),
+    check('id').custom( existeFolderPorId ),
+    validarJwt,
+    validarResultados
+],deleteFolder);
 
 
 module.exports = router;
