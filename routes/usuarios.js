@@ -6,7 +6,8 @@ const {
     deleteUser,
     updateUser,
     getUsers,
-    authUser
+    authUser,
+    getMe
 } = require("../controllers/usuario");
 
 const {validarResultados} = require("../helpers/validarResultados");
@@ -21,7 +22,7 @@ const router = Router();
 router.post("/crus",
 [
     check("email","no es un correo valido").isEmail(),
-    check("password","introduzca una contraseña de mas de 8 caracteres").notEmpty(),
+    check("password","introduzca una contraseña de mas de 8 caracteres").not().isEmpty(),
     validarResultados,
 ],createUser);
 
@@ -39,6 +40,11 @@ router.post("/auth",
 router.get("/gtus",
     validarJwt
 ,getUsers);
+
+
+router.get("/gtme",
+    validarJwt
+,getMe);
 
 
 //actualizar usuarios

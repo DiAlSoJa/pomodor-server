@@ -16,6 +16,7 @@ const createCarta= async(req,res)=>{
         res.status(500).json({ message: 'Error al crear la carta' });
     }
 }
+
 const getCartaPorId=async(req,res)=>{
     const { id } = req.params;
 
@@ -32,6 +33,7 @@ const getCartaPorId=async(req,res)=>{
         res.status(500).json({ message: 'Error al obtener la carta' });
     }
 }
+
 const getCartaPorFolder=async(req,res)=>{
     const { id } = req.params;
 
@@ -48,10 +50,42 @@ const getCartaPorFolder=async(req,res)=>{
         res.status(500).json({ message: 'Error al obtener la carta' });
     }
 }
-const updateCarta=(req,res)=>{
-    res.json({msg:"update"})
+
+const updateCarta=async(req,res)=>{
+    const { front, back } = req.body;
+    const { id } = req.params;
+
+    try {
+        const carta = await Carta.findByIdAndUpdate(id, { front, back });
+
+        if (!carta) {
+            return res.status(404).json({ message: 'Carta no encontrada' });
+        }
+
+        res.json(carta);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al actualizar la carta' });
+    }
 }
 
+
+const updateInterval= async()=>{
+
+    const { id } = req.params;
+
+    try{
+        const carta = await Carta.findById(id);
+        if (!carta) {
+            return res.status(404).json({ message: 'Carta no encontrada' });
+        }
+
+        res.json(carta);
+    }catch(e){
+        console.log(e);
+        res.status(500).json({msg: "Error al actualizar el intervalo"})
+    }
+}
 
 const deleteCarta=async(req,res)=>{
     const { id } = req.params;
@@ -70,11 +104,11 @@ const deleteCarta=async(req,res)=>{
     }
 }
 
-
 module.exports={
     createCarta,
     getCartaPorId,
     updateCarta,
     deleteCarta,
-    getCartaPorFolder
+    getCartaPorFolder,
+    updateInterval
 }

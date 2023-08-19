@@ -5,7 +5,8 @@ const {
     updateCarta,
     deleteCarta,
     getCartaPorId,
-    getCartaPorFolder
+    getCartaPorFolder,
+    updateInterval
 } = require("../controllers/carta");
 const { validarJwt } = require("../helpers/jsonwebtoken");
 const { validarResultados } = require("../helpers/validarResultados");
@@ -37,9 +38,27 @@ router.get("/gtcafo/:id",[
     validarResultados
 ],getCartaPorFolder);
 
-router.put("/puca",updateCarta);
+router.put("/puca/:id",[
+    check('id', 'No es un ID válido').isMongoId(),
+    check('id').custom( existeCartaPorId ),
+    check("front","Pon la parte de enfrente").not().isEmpty(),
+    check("back","pon la parte de atras").not().isEmpty(),
+    validarJwt,
+    validarResultados
+],updateCarta);
 
-router.delete("/deca",deleteCarta);
+router.put("/repaso/:id",[
+    check("interval","tienes que actualizar el intervalo").not().isEmpty(),
+    validarJwt,
+    validarResultados
+],updateInterval);
+
+router.delete("/deca/:id",[
+    check('id', 'No es un ID válido').isMongoId(),
+    check('id').custom( existeCartaPorId ),
+    validarJwt,
+    validarResultados
+],deleteCarta);
 
 
 module.exports = router;

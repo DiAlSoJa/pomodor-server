@@ -71,6 +71,16 @@ const getUsers=async(req,res)=>{
         usuarios
     });
 }
+const getMe=async(req,res)=>{
+    const { _id,username,correo } = req.body.user;
+
+
+    res.json({
+        _id,
+        username,
+        correo
+    });
+}
 
 //actualizar usuario
 const updateUser=async(req,res)=>{
@@ -141,5 +151,6 @@ module.exports={
     getUsers,
     updateUser,
     deleteUser,
-    authUser
+    authUser,
+    getMe
 }
