@@ -1,4 +1,6 @@
 const Folder = require("../models/folder");
+const Carta = require("../models/carta");
+
 const createFolder=async(req,res)=>{
     const { user, name } = req.body;
 
@@ -49,10 +51,13 @@ const deleteFolder=async(req,res)=>{
     try {
         const folder = await Folder.findByIdAndDelete(id);
 
+        
         if (!folder) {
             return res.status(404).json({ message: 'Carpeta no encontrada' });
         }
-
+        
+        await Carta.deleteMany({folder_id:id});
+        
         res.json({ message: 'Carpeta eliminada exitosamente' });
     } catch (error) {
         console.error(error);
